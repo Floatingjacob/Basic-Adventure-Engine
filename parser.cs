@@ -1,6 +1,6 @@
 ﻿using System.IO.Compression;
 
-public static class parser
+public static class Parser
 {
     // Should eventually make this convert "adventure source" to some sort of h2 database for speed 
     public static void parseAdventure(string adventureFile)
@@ -13,14 +13,14 @@ public static class parser
             {
                 case "AUTHOR":
                     Console.WriteLine($"This adventure is authored by \"{line[1]}\"");
-                    entry.a.adventureInfo.Author = line[1];
+                    Entry.a.adventureInfo.Author = line[1];
                     break;
                 case "ADVENTURE":
                     Console.WriteLine($"This adventure is called \"{line[1]}\"");
-                    entry.a.adventureInfo.Name = line[1];
+                    Entry.a.adventureInfo.Name = line[1];
                     break;
                 case "STARTING":
-                    entry.a.adventureInfo.StartingScene = line[1];
+                    Entry.a.adventureInfo.StartingScene = line[1];
                     break;
             }
         }
@@ -55,10 +55,8 @@ public static class parser
                         {
                             action.Shortcuts.Add(something[0].Trim('$'), something[1]);
                         }
-
                     }
-                    entry.a.Actions.Add(action.ID, action);
-
+                    Entry.a.Actions.Add(action.ID, action);
                 }
             }
 
@@ -82,6 +80,7 @@ public static class parser
                                 item.Name = something[1];
                                 break;
                             case "ATK":
+                                // Need to implement range parsing (ex. ATK:1..3 would mean attack could be a random number between 1 and 3, inclusive)
                                 item.Attack = something[1];
                                 break;
                             case "DESC":
@@ -118,10 +117,8 @@ public static class parser
                                 item.Health = int.Parse(something[1]); // I trust that the adventure creators aren't stupid enough to type the number as a word
                                 break;
                         }
-
                     }
-                    entry.a.Items.Add(item.ID, item);
-
+                    Entry.a.Items.Add(item.ID, item);
                 }
             }
             if (dir[dir.Length - 1] == "scenes")
@@ -157,11 +154,8 @@ public static class parser
                         {
                             scene.Shortcuts.Add(something[0].Trim('$'), something[1]);
                         }
-
-
                     }
-                    entry.a.Scenes.Add(scene.ID, scene);
-
+                    Entry.a.Scenes.Add(scene.ID, scene);
                 }
             }
 

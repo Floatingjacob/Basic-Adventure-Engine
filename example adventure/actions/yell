@@ -2,9 +2,14 @@ ID:YELL
 
 PRINTL:You yell into the distance.
 CPRINTL:**white**Due to some unforseen force, **red**you died**green**
-CPRINTL:**red**Your health is %HEALTH
 PRINTL:Try again?
 CPRINT:**cyan**(y/n)>**yellow** 
+
 SET:opt=%READ
 
-CPRINTL:**white**You just typed **yellow**%opt**white**! # for debugging
+IF:%opt==y
+PRINT:Unfortounately, this is real life. Meaning that you can't respawn.\nThe end.
+ENDIF
+IF:%opt==n
+PRINT:You decide that you'd rather stay dead. The end.
+ENDIF

@@ -5,7 +5,5 @@ PRINT:2. Save Progress
 PRINT:3. Restore Progress
 PRINT:4. Quit Adventure
 
-$1:RETURN
-$2:SAVE
-$3:RESTORE
-$4:QUIT
+SET:opt=%READ
+

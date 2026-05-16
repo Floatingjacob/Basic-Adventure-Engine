@@ -1,5 +1,6 @@
 ﻿public static class c
 {
+    // Eventually need to do DRY stuff to cut down on the number of lines
 	public static void colorPrint(string text, bool useOldColor = true)
 	{
 		ConsoleColor old = Console.ForegroundColor;
@@ -12,13 +13,13 @@
 				case "blue":
 					Console.ForegroundColor = ConsoleColor.Blue;
 					Console.Write(stuff[i + 1]);
-					
-					break;
+                    if (useOldColor) Console.ForegroundColor = old;
+                    break;
 				case "dblue":
 					Console.ForegroundColor = ConsoleColor.DarkBlue;
 					Console.Write(stuff[i + 1]);
-					Console.ForegroundColor = old;
-					break;
+                    if (useOldColor) Console.ForegroundColor = old;
+                    break;
 				case "green":
 					Console.ForegroundColor = ConsoleColor.Green;
 					Console.Write(stuff[i + 1]);
@@ -107,12 +108,12 @@
                 case "blue":
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write(stuff[i + 1]);
-
+                    if (useOldColor) Console.ForegroundColor = old;
                     break;
                 case "dblue":
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
                     Console.Write(stuff[i + 1]);
-                    Console.ForegroundColor = old;
+                    if (useOldColor) Console.ForegroundColor = old;
                     break;
                 case "green":
                     Console.ForegroundColor = ConsoleColor.Green;

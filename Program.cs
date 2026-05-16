@@ -1,4 +1,7 @@
-﻿public static class entry
+﻿// Should probably eventually add a "dev adventure folder" so creators don't need to zip WIP adventures every time they want to test it
+
+
+public static class Entry
 {
     public static Adventure a = new();
     public static string[] adventures = [];
@@ -15,7 +18,7 @@ What do you want to do?
     static void Main(string[] args)
     {
         init();
-        if (args.Length > 0)
+        /*if (args.Length > 0)
         {
             for (var i = 0; i < args.Length; i++)
             {
@@ -28,35 +31,35 @@ What do you want to do?
                 }
             }
         }
-        else
+        else*/
         {
 
-                c.colorPrint(greeting);
-                int n = -1;
-                while (n == -1)
+            c.colorPrint(greeting);
+            int n = -1;
+            while (n == -1)
+            {
+                try
                 {
-                    try
-                    {
-                        c.colorPrint("**white**>**yellow** ", false);
-                        n = int.Parse(Console.ReadLine().Trim());
-                        Console.ForegroundColor = ConsoleColor.White;
+                    c.colorPrint("**white**>**yellow** ", false);
+                    n = int.Parse(Console.ReadLine().Trim());
+                    Console.ForegroundColor = ConsoleColor.White;
 
-                    }
-                    catch (FormatException) { }
                 }
-                switch (n)
-                {
-                    case 1:
-                        a.newAdventure();
-                        break;
-                }
+                catch (FormatException) { }
             }
-
-        
+            switch (n)
+            {
+                // I should like, actually finish this menu :p
+                case 1:
+                    a.newAdventure();
+                    break;
+            }
+        }
     }
 
-    internal static void init()
-    {   if (Directory.Exists("tmp")) Directory.Delete("tmp", true);
+    private static void init()
+    {
+        if (Directory.Exists("tmp")) Directory.Delete("tmp", true);
         if (!File.Exists("adventures.txt")) File.WriteAllText("adventures.txt", "");
         adventures = File.ReadAllLines("adventures.txt");
     }
