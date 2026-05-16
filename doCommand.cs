@@ -19,7 +19,7 @@ public partial class Adventure
         if (a[0].ToUpper() == "IF")
         {
 
-            ifStack.Push(!evalIf(slap(a[1])));
+            ifStack.Push(evalIf(slap(a[1])));
 
         }
         else if (a[0].ToUpper() == "ENDIF")
