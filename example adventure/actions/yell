@@ -8,7 +8,7 @@ CPRINT:**cyan**(y/n)>**yellow**
 SET:opt=%READ
 
 IF:%opt==y
-PRINTL:Unfortounately, this is real life. Meaning that you can't respawn.\nThe end.
+PRINTL:Unfortunately, this is real life. Meaning that you can't respawn.\nThe end.
 ENDIF
 IF:%opt==n
 PRINTL:You decide that you'd rather stay dead. The end.

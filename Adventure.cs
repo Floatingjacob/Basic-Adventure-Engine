@@ -8,7 +8,7 @@
     private string CurrentScene;
     private string Caller = "";
     public bool playing = false;
-    private bool iffy = false;
+    private Stack<bool> ifStack = new(); // I don't really understand how this works, but its supposed to make nested if stamements not explode
 
     /*
         save format should be something like
