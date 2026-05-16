@@ -1,10 +1,10 @@
 ﻿public partial class Adventure
 {
-    private Dictionary<string, Scene> Scenes = new();
-    private Dictionary<string, Action> Actions = new();
-    private Dictionary<string, Item> Items = new();
+    public Dictionary<string, Scene> Scenes = new();
+    public Dictionary<string, Action> Actions = new();
+    public Dictionary<string, Item> Items = new();
     private Dictionary<string, GlobalVariable> Globals = new();
-    private AdventureInfo adventureInfo = new() { Name = "", StartingScene = "" };
+    public AdventureInfo adventureInfo = new() { Name = "", StartingScene = "" };
     private string CurrentScene;
     private string Caller = "";
     public bool playing = false;

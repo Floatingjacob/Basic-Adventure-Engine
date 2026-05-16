@@ -31,7 +31,6 @@ public static class Parser
             // I know that there's a more efficent way to do this, but I don't know what that way is lol
             if (dir[dir.Length - 1] == "actions")
             {
-
                 foreach (String f in Directory.EnumerateFiles(d))
                 {
                     Action action = new() { Actions = [], ID = "UNDEFINED", Shortcuts = [] };
