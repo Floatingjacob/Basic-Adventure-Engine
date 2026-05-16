@@ -1,0 +1,10 @@
+ID:YELL
+
+PRINTL:You yell into the distance.
+CPRINTL:**white**Due to some unforseen force, **red**you died**green**
+CPRINTL:**red**Your health is %HEALTH
+PRINTL:Try again?
+CPRINT:**cyan**(y/n)>**yellow** 
+SET:opt=%READ
+
+CPRINTL:**white**You just typed **yellow**%opt**white**! # for debugging

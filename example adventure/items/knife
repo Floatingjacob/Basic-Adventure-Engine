@@ -1,0 +1,5 @@
+ID:KNIFE
+NAME:Knife
+ATK:1..3
+DESC: A common kitchen knife
+ATTR:WEAPON

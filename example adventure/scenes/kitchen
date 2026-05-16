@@ -1,0 +1,10 @@
+ID:kitchen
+TEXT:You are in a cramped kitchen. There is\n%ITEMS\n\nYou can\n%ACTIONS\n\nWhat do you do?\n
+ACTIONS:kitchenActions
+ACTION:1%Go outside
+ACTION:0%Pause
+ITEMS:KNIFE%BREAD
+
+# Shortcuts
+$1:NAV%OUTSIDE
+$0:DO%PAUSE
