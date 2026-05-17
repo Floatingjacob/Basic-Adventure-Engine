@@ -73,10 +73,8 @@
         sceneText = sceneText.Replace("%ACTIONS", getActions(SceneID));
         sceneText = sceneText.Replace("%ADVENTURE", adventureInfo.Name);
 
-        Console.WriteLine(slap(sceneText));
+        c.colorPrintln(slap(sceneText));
         if (Scenes[SceneID].ActionsFile != null) doCommand($"DO%{Scenes[SceneID].ActionsFile}");
-
-
     }
 
     private void inputLoop()

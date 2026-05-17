@@ -1,6 +1,8 @@
 ﻿// Should probably eventually add a "dev adventure folder" so creators don't need to zip WIP adventures every time they want to test it
 
 
+using System.Runtime.CompilerServices;
+
 public static class Entry
 {
     public static Adventure a = new();
@@ -15,6 +17,13 @@ What do you want to do?
 **yellow**4. **white**Manage saves
 **yellow**0. **white**Exit
 ";
+    static string manageAdventure = @"**cyan**Manage Adventures
+
+**white**What do you want to do?
+**yellow**1. **white**Import an adventure
+**yellow**2. **white**Delete an adventure
+**yellow**0. **white**Go back
+> **yellow**";
     static void Main(string[] args)
     {
         init();
@@ -53,6 +62,29 @@ What do you want to do?
                 case 1:
                     a.newAdventure();
                     break;
+                case 3:
+                    c.colorPrint(manageAdventure, false);
+                    string input = Console.ReadLine();
+                    while (String.IsNullOrWhiteSpace(input))
+                    {
+                        c.colorPrint("**white**>**yellow** ", false);
+                        input = Console.ReadLine();
+                    }
+                    switch (input)
+                    {
+                        case "1":
+                            c.colorPrint("**white**Enter the path to the adventure: ");
+                            string i = Console.ReadLine();
+                            while (String.IsNullOrWhiteSpace(input))
+                            {
+                                c.colorPrint("**white**Enter the path to the adventure: ");
+                                i = Console.ReadLine();
+                                
+                            }
+                            addAdventure(i);
+                            break;
+                    }
+                    break;
             }
         }
     }
@@ -64,4 +96,19 @@ What do you want to do?
         adventures = File.ReadAllLines("adventures.txt");
     }
 
+    private static void addAdventure(string path)
+    {
+        try
+        {
+            path = path.Trim(['"', '\'']);
+            string dest = Path.Combine("Adventures", Path.GetFileName(path));
+            Directory.CreateDirectory("Adventures");
+            File.Copy(path, dest, true); 
+            Parser.parseAdventure(dest);
+            File.AppendAllText("adventures.txt", $"\n{a.adventureInfo.Name}::{dest}");
+            c.colorPrintln($"**green**Adventure \"{a.adventureInfo.Name}\" successfully imported!", true);
+            a = new();
+        }
+        catch (Exception ex) { Console.WriteLine(ex); }
+    }
 }

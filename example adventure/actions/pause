@@ -7,3 +7,4 @@ PRINT:4. Quit Adventure
 
 SET:opt=%READ
 
+IF:%opt==1
