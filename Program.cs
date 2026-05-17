@@ -75,7 +75,7 @@ What do you want to do?
                         case "1":
                             c.colorPrint("**white**Enter the path to the adventure: ");
                             string i = Console.ReadLine();
-                            while (String.IsNullOrWhiteSpace(input))
+                            while (String.IsNullOrWhiteSpace(i))
                             {
                                 c.colorPrint("**white**Enter the path to the adventure: ");
                                 i = Console.ReadLine();
