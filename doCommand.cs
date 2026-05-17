@@ -1,4 +1,5 @@
 ﻿// This has it's own file because it is really chunky
+// TODO: add support for while loops, OR, AND, integers, math, etc.
 public partial class Adventure
 {
    private void doCommand(string command, string? caller = null)
@@ -66,13 +67,13 @@ public partial class Adventure
                         string[] arg = slap(a[1]).Split('=');
                         if (arg[1][0] == '%')
                         {
-                            arg[1] = arg[1].Replace("%READ", Console.ReadLine());
+                            arg[1] = arg[1].Replace("%READ", getInput());
 
                             // Add more stuff eventually
                         }
                         Variable var = new Variable { Name = arg[0], Value = arg[1] };
                         if (Actions[Caller].Variables == null) Actions[Caller].Variables = [];
-                        Actions[Caller].Variables.TryAdd(arg[0], var);
+                        if (Actions[Caller].Variables.TryAdd(arg[0], var) != true) Actions[Caller].Variables[arg[0]] = var;
                     }
                     catch (Exception ex)
                     {
@@ -91,7 +92,7 @@ public partial class Adventure
                         }
                         GlobalVariable var = new GlobalVariable { Name = arg[0], Value = arg[1] };
                         if (Globals == null) Globals = [];
-                        Globals.TryAdd(arg[0], var);
+                        if (Globals.TryAdd(arg[0], var) != true) Globals[arg[0]] = var;
                     }
                     catch (Exception ex)
                     {
@@ -103,6 +104,11 @@ public partial class Adventure
                     break;
                 case "DELAY":
                     Thread.Sleep(int.Parse(a[1].Trim()));
+                    break;
+                default:
+                    if (a[0].ToUpper() == "ENDIF") break;
+                    if (a[0].ToUpper() == "IF") break;
+                    Console.WriteLine($"Unknown command: \"{a[0]}\" from caller \"{caller}\"");
                     break;
             }
 

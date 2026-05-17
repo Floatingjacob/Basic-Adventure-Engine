@@ -1,8 +1,0 @@
-ID:OUTSIDE
-TEXT:You are outside. There is a squat cottage nearby. What do you do? %ACTIONS
-
-ACTION:1%Enter cottage
-ACTION:2%Yell into the distance
-
-$1:NAV%kitchen
-$2:DO%YELL

@@ -3,28 +3,34 @@
 public static class Parser
 {
     // Should eventually make this convert "adventure source" to some sort of h2 database for speed 
-    public static void parseAdventure(string adventureFile)
+    public static void parseAdventure(string adventureFile, bool indev = false)
     {
-        ZipFile.ExtractToDirectory(adventureFile, "tmp", true);
-        foreach (String l in File.ReadAllLines(Path.Join("tmp", "meta")))
+        string path = "indev";
+        if (!indev)
         {
-            string[] line = l.Split(':');
-            switch (line[0])
-            {
-                case "AUTHOR":
-                    Console.WriteLine($"This adventure is authored by \"{line[1]}\"");
-                    Entry.a.adventureInfo.Author = line[1];
-                    break;
-                case "ADVENTURE":
-                    Console.WriteLine($"This adventure is called \"{line[1]}\"");
-                    Entry.a.adventureInfo.Name = line[1];
-                    break;
-                case "STARTING":
-                    Entry.a.adventureInfo.StartingScene = line[1];
-                    break;
-            }
+            path = "tmp";
+            ZipFile.ExtractToDirectory(adventureFile, "tmp", true);
         }
-        foreach (String d in Directory.GetDirectories("tmp"))
+            foreach (String l in File.ReadAllLines(Path.Join(path, "meta")))
+            {
+                string[] line = l.Split(':');
+                switch (line[0])
+                {
+                    case "AUTHOR":
+                        Console.WriteLine($"This adventure is authored by \"{line[1]}\"");
+                        Entry.a.adventureInfo.Author = line[1];
+                        break;
+                    case "ADVENTURE":
+                        Console.WriteLine($"This adventure is called \"{line[1]}\"");
+                        Entry.a.adventureInfo.Name = line[1];
+                        break;
+                    case "STARTING":
+                        Entry.a.adventureInfo.StartingScene = line[1];
+                        break;
+                }
+            }
+        
+        foreach (String d in Directory.GetDirectories(path))
         {
             string[] dir = d.Split(Path.DirectorySeparatorChar);
 

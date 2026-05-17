@@ -1,6 +1,0 @@
-ID:BREAD
-NAME:Loaf of Bread
-ATTR:CONSUMABLE$HEALTH
-DESC:A loaf of bread
-HEALTH:4
-USE:You eat the bread and feel a little better. +4 health.

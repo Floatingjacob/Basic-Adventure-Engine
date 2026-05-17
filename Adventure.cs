@@ -1,4 +1,5 @@
-﻿public partial class Adventure
+﻿// TODO: make items actually do stuff, implement saving and loading, etc.
+public partial class Adventure
 {
     public Dictionary<string, Scene> Scenes = new();
     public Dictionary<string, Action> Actions = new();
@@ -32,31 +33,37 @@
 
     }
 
-    public void newAdventure()
+    public void newAdventure(bool indev = false)
     {
-        playing = true;
-        Console.WriteLine("Which adventure do you want to start?");
-        int count = 1;
-        foreach (String s in Entry.adventures)
+        if (!indev)
         {
-            c.colorPrint($"**yellow**{count}. **white**{s.Split("::")[0]}\n");
-            count++;
-        }
-
-        int n = -1;
-        while (n == -1)
-        {
-            try
+            playing = true;
+            Console.WriteLine("Which adventure do you want to start?");
+            int count = 1;
+            foreach (String s in Entry.adventures)
             {
-                c.colorPrint("**white**>**yellow** ", false);
-                n = int.Parse(Console.ReadLine().Trim());
-                Console.ForegroundColor = ConsoleColor.White;
-
+                c.colorPrint($"**yellow**{count}. **white**{s.Split("::")[0]}\n");
+                count++;
             }
-            catch (FormatException) { }
-        }
 
-        Parser.parseAdventure(Entry.adventures[n - 1].Split("::")[1]);
+            int n = -1;
+            while (n == -1)
+            {
+                try
+                {
+                    c.colorPrint("**white**>**yellow** ", false);
+                    n = int.Parse(Console.ReadLine().Trim());
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                }
+                catch (FormatException) { }
+            }
+
+            Parser.parseAdventure(Entry.adventures[n - 1].Split("::")[1]);
+        }
+        Console.WriteLine("Press enter to begin...");
+        Console.ReadLine();
+        Console.Clear();
         displayScene(adventureInfo.StartingScene);
         while (playing)
         {
@@ -73,7 +80,7 @@
         sceneText = sceneText.Replace("%ACTIONS", getActions(SceneID));
         sceneText = sceneText.Replace("%ADVENTURE", adventureInfo.Name);
 
-        c.colorPrintln(slap(sceneText));
+        c.colorPrint(slap(sceneText));
         if (Scenes[SceneID].ActionsFile != null) doCommand($"DO%{Scenes[SceneID].ActionsFile}");
     }
 
@@ -88,9 +95,28 @@
         {
             doCommand(Scenes[CurrentScene].Shortcuts[input.Trim()]);
         }
-        catch (Exception ex) { Console.WriteLine(ex); }
+        catch (Exception ex) {
+            switch (ex.GetBaseException())
+            {
+                case KeyNotFoundException:
+                    Console.WriteLine($"Input \"{input}\" not recognized in scene \"{CurrentScene}\" (current scene)");
+                    break;
+                default:
+                    Console.WriteLine(ex);
+                    break;
+            }
+            
+        }
     }
-
+    private string getInput()
+    {
+        string input = "";
+        while(String.IsNullOrWhiteSpace(input) || String.IsNullOrEmpty(input))
+        {
+            input = Console.ReadLine();
+        }
+        return input;
+    }
     private bool evalIf(string conditions)
     {
         string[] parts = [];
@@ -122,12 +148,12 @@
                 {
                     return true;
                 }
-                else { 
-                    return false; 
+                else
+                {
+                    return false;
                 }
         }
         return false; // This path should never be reached, but just in case...
-
     }
 
     private string slap(string input)
