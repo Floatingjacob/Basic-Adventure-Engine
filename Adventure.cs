@@ -63,6 +63,7 @@ public partial class Adventure
         }
         Console.WriteLine("Press enter to begin...");
         Console.ReadLine();
+        Console.Title = $"Basic Adventure Engine - {adventureInfo.Name}";
         Console.Clear();
         displayScene(adventureInfo.StartingScene);
         while (playing)
@@ -74,6 +75,7 @@ public partial class Adventure
 
     private void displayScene(String SceneID)
     {
+        Console.Clear();
         CurrentScene = SceneID;
         string sceneText = Scenes[SceneID].Text;
         sceneText = sceneText.Replace("%ITEMS", getItems(SceneID));

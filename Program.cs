@@ -94,6 +94,7 @@ What do you want to do?
 
     private static void init()
     {
+        Console.Title = "Basic Adventure Engine";
         if (Directory.Exists("tmp")) Directory.Delete("tmp", true);
         if (!File.Exists("adventures.txt")) File.WriteAllText("adventures.txt", "");
         adventures = File.ReadAllLines("adventures.txt");

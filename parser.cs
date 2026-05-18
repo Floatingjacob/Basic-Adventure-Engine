@@ -13,7 +13,7 @@ public static class Parser
         }
             foreach (String l in File.ReadAllLines(Path.Join(path, "meta")))
             {
-                string[] line = l.Split(':');
+                string[] line = l.Split(':', 2);
                 switch (line[0])
                 {
                     case "AUTHOR":
@@ -74,7 +74,7 @@ public static class Parser
                     string[] lines = File.ReadAllLines(f);
                     foreach (string line in lines)
                     {
-                        string[] something = line.Split(':');
+                        string[] something = line.Split(':', 2);
 
                         switch (something[0])
                         {
@@ -135,7 +135,7 @@ public static class Parser
                     string[] lines = File.ReadAllLines(f);
                     foreach (string line in lines)
                     {
-                        string[] something = line.Split([':', '%'], 2);
+                        string[] something = line.Split([':'], 2);
 
                         switch (something[0])
                         {
