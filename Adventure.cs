@@ -175,10 +175,8 @@ public partial class Adventure
         {
             if (Actions[Caller].Variables != null)
             {
-                Actions[Caller].Variables.OrderBy(pair => pair.Key.Length);
-                foreach (var v in Actions[Caller].Variables)
+                foreach (var v in Actions[Caller].Variables.OrderByDescending(pair => pair.Key.Length))
                 {
-
                     if (result.Contains($"%{v.Value.Name}"))
                     {
                         result = result.Replace($"%{v.Value.Name}", v.Value.Value.Trim());
@@ -187,10 +185,8 @@ public partial class Adventure
             }
             if (Globals != null)
             {
-                Globals.OrderBy(pair => pair.Key.Length);
-                foreach (var g in Globals)
+                foreach (var g in Globals.OrderByDescending(pair => pair.Key.Length))
                 {
-
                     if (result.Contains($"%{g.Value.Name}"))
                     {
                         result = result.Replace($"%{g.Value.Name}", g.Value.Value.Trim());
