@@ -2,7 +2,6 @@
 {
     public required string ID { get; set; }
     public required List<string> Actions { get; set; }
-    public Dictionary<string, string>? Shortcuts { get; set; }
     public Dictionary<string, Variable>? Variables { get; set; }
 }
 

@@ -6,8 +6,10 @@ public static class Parser
     public static void parseAdventure(string adventureFile, bool indev = false)
     {
         string path = "indev";
+        Entry.a.indev = indev;
         if (!indev)
         {
+            if (Directory.Exists("tmp")) Directory.Delete("tmp", true);
             path = "tmp";
             ZipFile.ExtractToDirectory(adventureFile, "tmp", true);
         }
@@ -39,14 +41,14 @@ public static class Parser
             {
                 foreach (String f in Directory.EnumerateFiles(d))
                 {
-                    Action action = new() { Actions = [], ID = "UNDEFINED", Shortcuts = [] };
+                    Action action = new() { Actions = [], ID = "UNDEFINED"};
                     string[] lines = File.ReadAllLines(f);
                     foreach (string line in lines)
                     {
                         if (line == "") continue;
                         string[] something = line.Split(':', 2);
 
-                        switch (something[0])
+                        switch (something[0].ToUpperInvariant())
                         {
                             case "ID":
                                 action.ID = something[1];
@@ -55,10 +57,6 @@ public static class Parser
                             default:
                                 action.Actions.Add(line);
                                 break;
-                        }
-                        if (line.StartsWith('$'))
-                        {
-                            action.Shortcuts.Add(something[0].Trim('$'), something[1]);
                         }
                     }
                     Entry.a.Actions.Add(action.ID, action);
@@ -76,7 +74,7 @@ public static class Parser
                     {
                         string[] something = line.Split(':', 2);
 
-                        switch (something[0])
+                        switch (something[0].ToUpperInvariant())
                         {
                             case "ID":
                                 item.ID = something[1];
@@ -95,7 +93,7 @@ public static class Parser
                                 List<string> attributes = something[1].Split('$').ToList();
                                 foreach (string a in attributes)
                                 {
-                                    switch (a)
+                                    switch (a.ToUpperInvariant())
                                     {
                                         case "WEAPON":
                                             item.Attributes.Add(Item.Attribute.Weapon);
@@ -137,7 +135,7 @@ public static class Parser
                     {
                         string[] something = line.Split([':'], 2);
 
-                        switch (something[0])
+                        switch (something[0].ToUpperInvariant())
                         {
                             case "ID":
                                 scene.ID = something[1];
@@ -157,7 +155,7 @@ public static class Parser
                         }
                         if (line.StartsWith('$'))
                         {
-                            scene.Shortcuts.Add(something[0].Trim('$'), something[1]);
+                            scene.Shortcuts.Add(something[0].TrimStart('$'), something[1]);
                         }
                     }
                     Entry.a.Scenes.Add(scene.ID, scene);

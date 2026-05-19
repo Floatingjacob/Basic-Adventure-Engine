@@ -31,7 +31,7 @@ public partial class Adventure
 
         if (shouldExecute)
         {
-            switch (a[0].ToUpper())
+            switch (a[0].ToUpper().TrimStart())
             {
                 case "ID":
                     Caller = a[1];
@@ -43,15 +43,9 @@ public partial class Adventure
                     displayScene(a[1]);
                     break;
                 case "PRINT":
-                    Console.Write(slap(a[1]));
-                    break;
-                case "PRINTL":
-                    Console.WriteLine(slap(a[1]));
-                    break;
-                case "CPRINT":
                     c.colorPrint(slap(a[1]), false);
                     break;
-                case "CPRINTL":
+                case "PRINTL":
                     c.colorPrintln(slap(a[1]));
                     break;
                 case "QUIT":
@@ -86,7 +80,7 @@ public partial class Adventure
                         string[] arg = slap(a[1]).Split('=');
                         if (arg[1][0] == '%')
                         {
-                            arg[1] = arg[1].Replace("%READ", Console.ReadLine());
+                            arg[1] = arg[1].Replace("%READ", getInput());
 
                             // Add more stuff eventually
                         }

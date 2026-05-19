@@ -1,6 +1,7 @@
 ﻿// TODO: make items actually do stuff, implement saving and loading, etc.
 public partial class Adventure
 {
+    public bool indev = false;
     public Dictionary<string, Scene> Scenes = new();
     public Dictionary<string, Action> Actions = new();
     public Dictionary<string, Item> Items = new();
@@ -35,9 +36,9 @@ public partial class Adventure
 
     public void newAdventure(bool indev = false)
     {
+        playing = true;
         if (!indev)
         {
-            playing = true;
             Console.WriteLine("Which adventure do you want to start?");
             int count = 1;
             foreach (String s in Entry.adventures)
@@ -95,7 +96,13 @@ public partial class Adventure
         }
         try
         {
-            doCommand(Scenes[CurrentScene].Shortcuts[input.Trim()]);
+            if (input == "!@#" && indev)
+            {
+                Entry.reloading = true;
+                playing = false;
+                return;
+            }
+            else doCommand(Scenes[CurrentScene].Shortcuts[input.Trim()]);
         }
         catch (Exception ex) {
             switch (ex.GetBaseException())
@@ -161,12 +168,14 @@ public partial class Adventure
     private string slap(string input)
     {
         string result = input;
+        
         if (result == null) return "";
         if (result.Contains("\\n")) result = result.Replace("\\n", "\n");
         if (result.Contains('%'))
         {
             if (Actions[Caller].Variables != null)
             {
+                Actions[Caller].Variables.OrderBy(pair => pair.Key.Length);
                 foreach (var v in Actions[Caller].Variables)
                 {
 
@@ -178,6 +187,7 @@ public partial class Adventure
             }
             if (Globals != null)
             {
+                Globals.OrderBy(pair => pair.Key.Length);
                 foreach (var g in Globals)
                 {
 
