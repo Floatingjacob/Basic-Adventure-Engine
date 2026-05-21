@@ -83,6 +83,7 @@ public partial class Adventure
         sceneText = sceneText.Replace("%ACTIONS", getActions(SceneID));
         sceneText = sceneText.Replace("%ADVENTURE", adventureInfo.Name);
 
+        if (Scenes[SceneID].PreActionsFile != null) doCommand($"DO%{Scenes[SceneID].PreActionsFile}");
         c.colorPrint(slap(sceneText));
         if (Scenes[SceneID].ActionsFile != null) doCommand($"DO%{Scenes[SceneID].ActionsFile}");
     }

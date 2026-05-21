@@ -152,6 +152,9 @@ public static class Parser
                             case "ACTIONS":
                                 scene.ActionsFile = something[1];
                                 break;
+                            case "PREACTIONS":
+                                scene.PreActionsFile = something[1];
+                                break;
                         }
                         if (line.StartsWith('$'))
                         {

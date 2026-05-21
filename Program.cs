@@ -228,7 +228,7 @@ PRINT:\nTry again? (y/n):
 SET:input=%READ
 IF:%input==y
 CLEAR
-NAV:bedroom
+NAV:RESET
 ENDIF
 IF:%input!=y
 PRINTL:Bye!

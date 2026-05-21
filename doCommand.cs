@@ -6,7 +6,7 @@ public partial class Adventure
     {
 
         string[] a = command.Split([':', '%'], 2);
-
+        a[0] = a[0].TrimStart();
         for (var i = 0; i < a.Length; i++) // Janky ahh commenting system
         {
 
@@ -31,7 +31,7 @@ public partial class Adventure
 
         if (shouldExecute)
         {
-            switch (a[0].ToUpper().TrimStart())
+            switch (a[0].ToUpper())
             {
                 case "ID":
                     Caller = a[1];
@@ -99,6 +99,14 @@ public partial class Adventure
                 case "DELAY":
                     Thread.Sleep(int.Parse(a[1].Trim()));
                     break;
+                case "RESET":
+                    Globals.Clear();
+                    foreach(string s in Actions.Keys)
+                    {
+                        if (Actions[s].Variables != null) Actions[s].Variables.Clear();
+                    }
+                    displayScene(adventureInfo.StartingScene);
+                    break;              
                 default:
                     if (a[0].ToUpper() == "ENDIF") break;
                     if (a[0].ToUpper() == "IF") break;

@@ -47,6 +47,7 @@ public class Scene
     public required List<string> Actions { get; set; }
     public required Dictionary<string, string> Shortcuts { get; set; }
     public string? ActionsFile { get; set; } // Action file to run after displaying the scene text
+    public string? PreActionsFile { get; set; } // Action file to run before displaying the scene text
     public string[]? Items { get; set; }
 }
 
