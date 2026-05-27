@@ -1,8 +1,14 @@
 ﻿public class Action
 {
     public required string ID { get; set; }
-    public required List<string> Actions { get; set; }
+    public required List<ActionLine> Actions { get; set; }
     public Dictionary<string, Variable>? Variables { get; set; }
+}
+
+public class ActionLine // There's probably a better name for this lol
+{
+    public required string Action { get; set; }
+    public int? LineNumber { get; set; }
 }
 
 public class Variable

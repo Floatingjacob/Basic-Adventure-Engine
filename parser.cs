@@ -41,10 +41,12 @@ public static class Parser
             {
                 foreach (String f in Directory.EnumerateFiles(d))
                 {
+                    int lineNum = 0;
                     Action action = new() { Actions = [], ID = "UNDEFINED"};
                     string[] lines = File.ReadAllLines(f);
                     foreach (string line in lines)
                     {
+                        lineNum++;
                         if (line == "") continue;
                         string[] something = line.Split(':', 2);
 
@@ -52,10 +54,11 @@ public static class Parser
                         {
                             case "ID":
                                 action.ID = something[1];
-                                action.Actions.Add(line);
+                                
+                                action.Actions.Add(new ActionLine() { Action = line, LineNumber = lineNum});
                                 break;
                             default:
-                                action.Actions.Add(line);
+                                action.Actions.Add(new ActionLine() { Action = line, LineNumber = lineNum});
                                 break;
                         }
                     }
@@ -164,7 +167,43 @@ public static class Parser
                     Entry.a.Scenes.Add(scene.ID, scene);
                 }
             }
-
         }
+        validateAdventure();
+    }
+
+    private static void validateAdventure() // Should eventually do DRY stuff, but it's fine for now since I just wanted to slam this out before I forgot how I was going to do it
+    {
+        foreach (var action in Entry.a.Actions.Values)
+        {
+            foreach (var a in action.Actions)
+            {
+                string[] l = a.Action.Split([':', '%'], 2);
+                if (l[0].ToUpperInvariant() == "DO")
+                {
+                    if (!Entry.a.Actions.ContainsKey(l[1])) c.colorPrintln($"**red**Action \"{l[1]}\" is called at line {a.LineNumber} in action \"{action.ID}\" but does not exist.");
+                }
+                if (l[0].ToUpperInvariant() == "NAV")
+                {
+                    if (!Entry.a.Scenes.ContainsKey(l[1])) c.colorPrintln($"**red**Scene \"{l[1]}\" is called at line {a.LineNumber} in action \"{action.ID}\" but does not exist.");
+                }
+            }
+        }
+
+        foreach (var scene in Entry.a.Scenes)
+        {
+            foreach (var s in scene.Value.Shortcuts)
+            {
+                string[] shortcut = s.Value.Split('%', 2);
+                if (shortcut[0].ToUpperInvariant() == "DO")
+                {
+                    if (!Entry.a.Actions.ContainsKey(shortcut[1])) c.colorPrintln($"**red**Action \"{shortcut[1]}\" is called from within scene \"{scene.Value.ID}\" but does not exist.");
+                }
+                if (shortcut[0].ToUpperInvariant() == "NAV")
+                {
+                    if (!Entry.a.Scenes.ContainsKey(shortcut[1])) c.colorPrintln($"**red**Scene \"{shortcut[1]}\" is called from within scene \"{scene.Value.ID}\" but does not exist.");
+                }
+            }
+        }
+
     }
 }

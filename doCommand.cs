@@ -2,7 +2,7 @@
 // TODO: add support for while loops, OR, AND, integers, math, etc.
 public partial class Adventure
 {
-   private bool doCommand(string command, string? caller = null) // Boolean so the caller can decide whether to continue excecuting commands 
+   private bool doCommand(string command, string? caller = null, int? lineNumber = null) // Boolean so the caller can decide whether to continue excecuting commands 
     {
         string[] a = command.Split([':', '%'], 2);
         a[0] = a[0].TrimStart();
@@ -19,7 +19,7 @@ public partial class Adventure
         if (a[0].ToUpper() == "IF")
         {
 
-            ifStack.Push(evalIf(slap(a[1])));
+            ifStack.Push(evalIf(slap(a[1]), lineNumber));
 
         }
         else if (a[0].ToUpper() == "ENDIF")
@@ -92,7 +92,10 @@ public partial class Adventure
                     }
                     break;
                 case "DO":
-                    foreach (string action in Actions[a[1]].Actions) if (!doCommand(action, Caller)) return false;
+                    foreach (var action in Actions[a[1]].Actions)
+                    {
+                        if (!doCommand(action.Action, Caller, action.LineNumber)) return false;
+                    }
                     break;
                 case "DELAY":
                     Thread.Sleep(int.Parse(a[1].Trim()));
@@ -108,7 +111,8 @@ public partial class Adventure
                 default:
                     if (a[0].ToUpper() == "ENDIF") break;
                     if (a[0].ToUpper() == "IF") break;
-                    Console.WriteLine($"Unknown command: \"{a[0]}\" from caller \"{caller}\"");
+                    if (lineNumber == null) c.colorPrintln($"**red**Unknown command: \"{a[0]}\" in caller \"{caller}\"**white**");
+                    else c.colorPrintln($"**red**Unknown command: \"{a[0]}\" at line {lineNumber} in caller \"{caller}\"**white**");
                     break;
             }
         }

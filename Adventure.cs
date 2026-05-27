@@ -24,7 +24,6 @@ public partial class Adventure
 
     public void saveProgress()
     {
-        // Hello darkness my old fr--
         List<string> save = [];
 
         save.Add($"ADVENTURE::{adventureInfo.Name}"); // adventure name is stored so the right adventure is loaded when a save is restored
@@ -201,7 +200,7 @@ public partial class Adventure
         }
         return input;
     }
-    private bool evalIf(string conditions)
+    private bool evalIf(string conditions, int? lineNumber)
     {
         string[] parts = [];
         int type = -1;
@@ -219,23 +218,15 @@ public partial class Adventure
         switch (type)
         {
             case 0:
-                if (parts[0] == parts[1])
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                if (parts[0] == parts[1]) return true;
+                else return false;
             case 1:
-                if (parts[0] != parts[1])
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                if (parts[0] != parts[1]) return true;
+                else return false;
+            case -1:
+                if (lineNumber == null) c.colorPrintln($"**red**Invalid evaluator in caller \"{Caller}\"**white**");
+                else c.colorPrintln($"**red**Invalid evaluator at line {lineNumber} in caller \"{Caller}\"**white**");
+                return false;
         }
         return false; // This path should never be reached, but just in case...
     }
