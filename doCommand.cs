@@ -2,9 +2,8 @@
 // TODO: add support for while loops, OR, AND, integers, math, etc.
 public partial class Adventure
 {
-   private void doCommand(string command, string? caller = null)
+   private bool doCommand(string command, string? caller = null) // Boolean so the caller can decide whether to continue excecuting commands 
     {
-
         string[] a = command.Split([':', '%'], 2);
         a[0] = a[0].TrimStart();
         for (var i = 0; i < a.Length; i++) // Janky ahh commenting system
@@ -41,7 +40,7 @@ public partial class Adventure
                     break;
                 case "NAV":
                     displayScene(a[1]);
-                    break;
+                    return false;
                 case "PRINT":
                     c.colorPrint(slap(a[1]), false);
                     break;
@@ -50,14 +49,13 @@ public partial class Adventure
                     break;
                 case "QUIT":
                     playing = false;
-                    return;
+                    return false;
                 case "READ":
                     Console.ReadLine();
                     break;
                 case "SET":
                     try
                     {
-
                         string[] arg = slap(a[1]).Split('=');
                         if (arg[1][0] == '%')
                         {
@@ -94,7 +92,7 @@ public partial class Adventure
                     }
                     break;
                 case "DO":
-                    foreach (string action in Actions[a[1]].Actions) doCommand(action, Caller);
+                    foreach (string action in Actions[a[1]].Actions) if (!doCommand(action, Caller)) return false;
                     break;
                 case "DELAY":
                     Thread.Sleep(int.Parse(a[1].Trim()));
@@ -113,8 +111,7 @@ public partial class Adventure
                     Console.WriteLine($"Unknown command: \"{a[0]}\" from caller \"{caller}\"");
                     break;
             }
-
         }
-
+        return true;
     }
 }

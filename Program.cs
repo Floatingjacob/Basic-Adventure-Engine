@@ -68,6 +68,36 @@ What do you want to do?
                     case 1:
                         a.newAdventure();
                         break;
+                    case 2:
+                        Console.Clear();
+                        c.colorPrintln("**blue**Choose a save to restore:\n");
+                        Dictionary<string, string> stuff = [];
+                        int counter = 1;
+                        foreach (String f in Directory.GetFiles("saves"))
+                        {
+                            stuff.Add(counter.ToString(), f);
+                            c.colorPrintln($"**yellow**{counter}. **white**{Path.GetFileName(f)}");
+                            counter++;
+                        }
+                        c.colorPrint("\n**white**> **yellow**");
+                        string i = Console.ReadLine();
+                        bool valid = false;
+                        while (!valid)
+                        {
+                            i = null;
+                            while (String.IsNullOrWhiteSpace(i))
+                            {
+                                c.colorPrint("**white**>**yellow** ", false);
+                                i = Console.ReadLine();
+                            }
+                            try
+                            {
+                                valid = true;
+                                a.loadProgress(stuff[i]);
+                            }
+                            catch (KeyNotFoundException) { valid = false; }
+                        }
+                        break;
                     case 3:
                         c.colorPrint(manageAdventure, false);
                         string input = Console.ReadLine();
@@ -97,7 +127,9 @@ What do you want to do?
     private static void init()
     {
         Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Basic Adventure Engine"));
+
         Directory.SetCurrentDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Basic Adventure Engine"));
+        Directory.CreateDirectory("saves");
         if (Directory.Exists("tmp")) Directory.Delete("tmp", true);
         if (!File.Exists("adventures.txt")) File.WriteAllText("adventures.txt", "");
         foreach (string s in File.ReadAllLines("adventures.txt"))
@@ -178,7 +210,7 @@ What do you want to do?
 
     private static void develop(bool clear = true)
     {
-        if(clear) Console.Clear();
+        if (clear) Console.Clear();
         if (!Directory.Exists("indev")) Directory.CreateDirectory("indev");
         if (!File.Exists(Path.Combine("indev", "meta"))) generateTemplate();
         c.colorPrintln($"**dgray**Indev adventure is located at {Path.GetFullPath("indev")}");
