@@ -84,7 +84,6 @@ What do you want to do?
                         bool valid = false;
                         while (!valid)
                         {
-                            i = null;
                             while (String.IsNullOrWhiteSpace(i))
                             {
                                 c.colorPrint("**white**>**yellow** ", false);
@@ -95,7 +94,11 @@ What do you want to do?
                                 valid = true;
                                 a.loadProgress(stuff[i]);
                             }
-                            catch (KeyNotFoundException) { valid = false; }
+                            catch (KeyNotFoundException)
+                            {
+                                valid = false;
+                                i = null;
+                            }
                         }
                         break;
                     case 3:
