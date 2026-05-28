@@ -48,17 +48,18 @@ public static class Parser
                     {
                         lineNum++;
                         if (line == "") continue;
-                        string[] something = line.Split(':', 2);
+                        string stripped = line.Split('#')[0]; // Moved the "commenting system" to over here
+                        string[] something = stripped.Split(':', 2);
 
                         switch (something[0].ToUpperInvariant())
                         {
                             case "ID":
                                 action.ID = something[1];
-                                
-                                action.Actions.Add(new ActionLine() { Action = line, LineNumber = lineNum});
+                                action.Actions.Add(new ActionLine() { Action = stripped, LineNumber = lineNum});
                                 break;
                             default:
-                                action.Actions.Add(new ActionLine() { Action = line, LineNumber = lineNum});
+                                if (String.IsNullOrWhiteSpace(something[0])) break;
+                                action.Actions.Add(new ActionLine() { Action = stripped, LineNumber = lineNum});
                                 break;
                         }
                     }
@@ -177,7 +178,7 @@ public static class Parser
         {
             foreach (var a in action.Actions)
             {
-                string[] l = a.Action.Split([':', '%'], 2);
+                string[] l = a.Action.Trim().Split([':', '%'], 2);
                 if (l[0].ToUpperInvariant() == "DO")
                 {
                     if (!Entry.a.Actions.ContainsKey(l[1])) c.colorPrintln($"**red**Action \"{l[1]}\" is called at line {a.LineNumber} in action \"{action.ID}\" but does not exist.");
@@ -193,7 +194,7 @@ public static class Parser
         {
             foreach (var s in scene.Value.Shortcuts)
             {
-                string[] shortcut = s.Value.Split('%', 2);
+                string[] shortcut = s.Value.Trim().Split('%', 2);
                 if (shortcut[0].ToUpperInvariant() == "DO")
                 {
                     if (!Entry.a.Actions.ContainsKey(shortcut[1])) c.colorPrintln($"**red**Action \"{shortcut[1]}\" is called from within scene \"{scene.Value.ID}\" but does not exist.");

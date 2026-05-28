@@ -5,9 +5,9 @@ public partial class Adventure
     public Dictionary<string, Scene> Scenes = new();
     public Dictionary<string, Action> Actions = new();
     public Dictionary<string, Item> Items = new();
-    private Dictionary<string, GlobalVariable> Globals = new();
+    public Dictionary<string, GlobalVariable> Globals = new();
     public AdventureInfo adventureInfo = new() { Name = "", StartingScene = "" };
-    private string CurrentScene;
+    public string CurrentScene;
     private string Caller = "";
     public bool playing = false;
     private Stack<bool> ifStack = new(); // I don't really understand how this works, but its supposed to make nested if stamements not explode
@@ -21,86 +21,6 @@ public partial class Adventure
         stats, variables etc.
 
     */
-
-    public void saveProgress()
-    {
-        List<string> save = [];
-
-        save.Add($"ADVENTURE::{adventureInfo.Name}"); // adventure name is stored so the right adventure is loaded when a save is restored
-        if (indev) save.Add("INDEV");
-        save.Add($"CURRENTSCENE::{CurrentScene}");
-
-        foreach (var action in Actions.Values) // saves local variables
-        {
-            if (action.Variables != null)
-            {
-                foreach (var localVariable in action.Variables)
-                {
-                    save.Add($"LOCALVAR::{action.ID}::{localVariable.Value.Name}::{localVariable.Value.Value ?? "NULL"}");
-                }
-            }
-        }
-        if (Globals.Values != null)
-        {
-            foreach (var global in Globals.Values) // saves global variables
-            {
-                save.Add($"GLOBALVAR::{global.Name}::{global.Value}");
-            }
-        }
-        string path = Path.Combine("saves", $"{adventureInfo.Name} - {DateTime.Now.ToString().Replace('/', '.').Replace(':','-')}.baesave");
-        File.WriteAllLines(path, save);
-        Console.WriteLine($"Progress saved at {Path.GetFullPath(path)}");
-    }
-
-    public void loadProgress(string SaveFile)
-    {
-        Console.WriteLine($"Loading save file \"{SaveFile}\" now...");
-        playing = true;
-        string[] save = File.ReadAllLines(SaveFile);
-        if (save[1] == "INDEV")
-        {
-            Parser.parseAdventure("indev", true);
-        }
-        else
-        {
-            foreach (string adventure in Entry.adventures)
-            {
-                string[] a = adventure.Split("::");
-                if (a[0] == save[0].Split("::")[1])
-                {
-                    Parser.parseAdventure(a[1]);
-                    break;
-                }
-            }
-        }
-        foreach(string line in save)
-        {
-            string[] currentLine = line.Split("::");
-            switch (currentLine[0])
-            {
-                case "CURRENTSCENE":
-                    CurrentScene = currentLine[1];
-                    break;
-                case "LOCALVAR":
-                    Variable var = new Variable { Name = currentLine[2], Value = currentLine[3] };
-                    if (Actions[currentLine[1]].Variables == null) Actions[currentLine[1]].Variables = [];
-                    if (Actions[currentLine[1]].Variables.TryAdd(currentLine[2], var) != true) Actions[currentLine[1]].Variables[currentLine[2]] = var;
-                    break;
-                case "GLOBALVAR":
-                    GlobalVariable gvar = new GlobalVariable { Name = currentLine[1], Value = currentLine[2] };
-                    if (Globals == null) Globals = [];
-                    if (Globals.TryAdd(currentLine[1], gvar) != true) Globals[currentLine[1]] = gvar;
-                    break;
-            }
-        }
-        Console.WriteLine("Progress restored! Press enter to continue...");
-        Console.ReadLine();
-        displayScene(CurrentScene);
-        while (playing)
-        {
-            inputLoop();
-        }
-    }
 
     public void newAdventure(bool indev = false)
     {
@@ -142,7 +62,7 @@ public partial class Adventure
 
     }
 
-    private void displayScene(String SceneID)
+    public void displayScene(String SceneID)
     {
         Console.Clear();
         CurrentScene = SceneID;
@@ -166,7 +86,7 @@ public partial class Adventure
         }   
     }
 
-    private void inputLoop()
+    public void inputLoop()
     {
         string input = "";
         while (String.IsNullOrWhiteSpace(input))
@@ -181,9 +101,12 @@ public partial class Adventure
                 playing = false;
                 return;
             }
-            else if (input.ToUpperInvariant() == "!@SAVE")
+            else if (input.ToUpperInvariant() == "!@SAVE") Progress.SaveProgress();
+            else if (input.ToUpperInvariant() == "!@RESTORE") Progress.RestoreProgress();
+            else if (input.ToUpperInvariant() == "!@QUIT")
             {
-                saveProgress();
+                playing = false;
+                return;
             }
             else doCommand(Scenes[CurrentScene].Shortcuts[input.Trim()]);
         }

@@ -6,14 +6,6 @@ public partial class Adventure
     {
         string[] a = command.Split([':', '%'], 2);
         a[0] = a[0].TrimStart();
-        for (var i = 0; i < a.Length; i++) // Janky ahh commenting system
-        {
-
-            if (a[i].Contains('#'))
-            {
-                a[i] = a[i].Split('#', 2)[0];
-            }
-        }
 
         if (caller != null) Caller = caller;
         if (a[0].ToUpper() == "IF")
