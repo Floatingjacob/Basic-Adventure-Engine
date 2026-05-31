@@ -75,7 +75,6 @@ public partial class Adventure
                             // Add more stuff eventually
                         }
                         GlobalVariable var = new GlobalVariable { Name = arg[0], Value = arg[1] };
-                        if (Globals == null) Globals = [];
                         if (Globals.TryAdd(arg[0], var) != true) Globals[arg[0]] = var;
                     }
                     catch (Exception ex)
@@ -99,7 +98,8 @@ public partial class Adventure
                         if (Actions[s].Variables != null) Actions[s].Variables.Clear();
                     }
                     displayScene(adventureInfo.StartingScene);
-                    break;              
+
+                    return false;
                 default:
                     if (a[0].ToUpper() == "ENDIF") break;
                     if (a[0].ToUpper() == "IF") break;

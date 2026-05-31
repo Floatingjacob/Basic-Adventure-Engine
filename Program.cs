@@ -232,7 +232,7 @@ PRINT:\nTry again? (y/n):
 SET:input=%READ
 IF:%input==y
 CLEAR
-NAV:RESET
+RESET
 ENDIF
 IF:%input!=y
 PRINTL:Bye!
